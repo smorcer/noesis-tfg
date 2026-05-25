@@ -1019,6 +1019,50 @@ html, body { overflow: hidden; }
 .closing-contact a { color: var(--green-light); text-decoration: none; }
 .closing-contact .bar { width: 1px; height: 16px; background: rgba(255,255,255,.2); }
 
+/* ── Closing CTA button ─────────────────────────── */
+.closing-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+  padding: 16px 32px;
+  background: rgba(107,197,206,.1);
+  border: 1.5px solid rgba(107,197,206,.35);
+  border-radius: 100px;
+  color: var(--green-light);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s, border-color .3s, box-shadow .3s, transform .2s;
+}
+.closing-cta:hover {
+  background: rgba(107,197,206,.2);
+  border-color: rgba(107,197,206,.65);
+  box-shadow: 0 0 32px rgba(107,197,206,.22), 0 0 8px rgba(107,197,206,.1);
+  transform: translateY(-2px);
+}
+.closing-cta-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-light);
+  box-shadow: 0 0 10px var(--green-light);
+  animation: hudBlip 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.closing-cta-arrow {
+  font-size: 18px;
+  transition: transform .25s;
+  font-family: inherit;
+}
+.closing-cta:hover .closing-cta-arrow {
+  transform: translateX(5px);
+}
+
 /* ── REDUCED MOTION respect ─────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
