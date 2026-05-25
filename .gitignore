@@ -1,0 +1,6 @@
+source/
+uploads/
+.claude/
+.thumbnail
+*.docx
+*.pdf

@@ -1,0 +1,1028 @@
+/* ═══════════════════════════════════════════════════════════
+   NOESIS · CAPA DE MEJORAS TECH (additive)
+   No sobreescribe nada del styles.css base
+═══════════════════════════════════════════════════════════ */
+
+/* ── Reveal on slide active ────────────────────────────────
+   When a slide is activated, all elements with [data-reveal]
+   inside it animate in with a stagger set by --i (index).
+═══════════════════════════════════════════════════════════ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(8px);
+  transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1), filter .7s ease;
+}
+.slide.is-revealed [data-reveal] {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+  transition-delay: calc(var(--i, 0) * 60ms + 50ms);
+}
+
+/* ── KINETIC TYPOGRAPHY (split-letter slide-in) ──────────── */
+.kinetic { display: inline-block; }
+.kinetic .ch {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.6em) rotateX(-30deg);
+  transform-origin: 50% 100%;
+  transition: opacity .55s cubic-bezier(.2,.8,.2,1), transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.slide.is-revealed .kinetic .ch {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--ki, 0) * 35ms + 350ms);
+}
+.kinetic .sp { display: inline-block; width: 0.25em; }
+
+/* ── SCANLINE OVERLAY (subtle) ──────────────────────────── */
+.tech-scan::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 2px,
+    rgba(107,197,206,.018) 2px,
+    rgba(107,197,206,.018) 3px
+  );
+  mix-blend-mode: screen;
+  z-index: 5;
+}
+
+/* ── HUD CORNER (tech meta on dark slides) ──────────────── */
+.hud-corner {
+  position: absolute; bottom: 28px; left: 56px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+  color: rgba(107,197,206,.45);
+  z-index: 40;
+}
+.hud-corner .hud-blip {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green-light);
+  box-shadow: 0 0 10px var(--green-light);
+  animation: hudBlip 1.6s ease-in-out infinite;
+}
+@keyframes hudBlip { 50% { opacity: .35; transform: scale(.7); } }
+.hud-corner .hud-bracket { color: rgba(107,197,206,.65); }
+
+/* ── COUNTER-UP styling ─────────────────────────────────── */
+[data-count] { font-variant-numeric: tabular-nums; }
+
+/* ── ACCENT PULSE (subtle continuous glow) ──────────────── */
+.accent-pulse, .pl-num, .fn-metric-v, .cl-kpi-num,
+.ev-strip-num, .es-phase-metric strong, .ht-result-stat strong,
+.kpi--hl .kpi-val, .rep-big {
+  animation: accentPulse 4s ease-in-out infinite;
+}
+@keyframes accentPulse {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  50%      { text-shadow: 0 0 24px rgba(107,197,206,.35); }
+}
+
+/* ── HOLOGRAPHIC RING on circular elements ──────────────── */
+.holo-ring {
+  position: relative;
+}
+.holo-ring::before {
+  content: '';
+  position: absolute; inset: -4px;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg,
+    transparent 0%, rgba(107,197,206,.4) 20%,
+    transparent 35%, transparent 65%,
+    rgba(34,106,114,.4) 80%, transparent 100%);
+  animation: holoSpin 6s linear infinite;
+  z-index: -1;
+  filter: blur(4px);
+}
+@keyframes holoSpin { to { transform: rotate(360deg); } }
+
+/* ── LIVE TICKER (corporate bottom strip on dark slides) ─ */
+.live-ticker {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 32px;
+  background: rgba(0,0,0,.4);
+  border-top: 1px solid rgba(107,197,206,.15);
+  display: flex; align-items: center;
+  overflow: hidden;
+  z-index: 30;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: .12em;
+  color: rgba(255,255,255,.55);
+  pointer-events: none;
+}
+.live-ticker-track {
+  display: inline-flex; gap: 56px;
+  white-space: nowrap;
+  animation: tickerSlide 60s linear infinite;
+  padding-left: 100%;
+}
+.live-ticker-track span { display: inline-flex; align-items: center; gap: 12px; }
+.live-ticker-track .tick-up   { color: #4ade80; }
+.live-ticker-track .tick-down { color: #ef6b6b; }
+.live-ticker-track .tick-dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--green-light); }
+@keyframes tickerSlide { to { transform: translateX(-50%); } }
+
+/* ── DONUT SVG · animated sweep ─────────────────────────── */
+.mp-donut circle[stroke-dasharray] {
+  opacity: 0;
+  transform: rotate(-90deg);
+  transform-origin: 100px 100px;
+}
+.slide.is-revealed .mp-donut circle[stroke-dasharray] {
+  animation: donutSweep 1.2s cubic-bezier(.4,0,.2,1) forwards;
+  animation-delay: calc(var(--di, 0) * 200ms + 400ms);
+}
+@keyframes donutSweep {
+  from { opacity: 0; stroke-dashoffset: var(--from, 0); }
+  to   { opacity: 1; }
+}
+
+/* ── FUNNEL fill animation ─────────────────────────────── */
+.fu-stage { position: relative; overflow: hidden; }
+.fu-stage::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: inherit;
+  filter: brightness(1.4);
+  opacity: 0;
+}
+.slide.is-revealed .fu-stage::before {
+  animation: funnelFill 1.4s cubic-bezier(.4,0,.2,1) forwards;
+  animation-delay: calc(var(--fi, 0) * 180ms + 400ms);
+  opacity: 1;
+}
+@keyframes funnelFill { from { width: 0; } to { width: 100%; } }
+
+/* ── GLITCH text (very subtle, for tech labels) ─────────── */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.glitch::before { color: #6bc5ce; transform: translate(-1px, 0); animation: glitchA 5s infinite; }
+.glitch::after  { color: #ef6b6b; transform: translate( 1px, 0); animation: glitchB 5.4s infinite; }
+@keyframes glitchA {
+  0%, 96%, 100% { opacity: 0; }
+  97% { opacity: .4; transform: translate(-2px, 0); }
+  98% { opacity: .4; transform: translate( 2px, -1px); }
+  99% { opacity: 0; }
+}
+@keyframes glitchB {
+  0%, 95%, 100% { opacity: 0; }
+  96% { opacity: .4; transform: translate( 2px, 0); }
+  97% { opacity: .4; transform: translate(-2px, 1px); }
+  98% { opacity: 0; }
+}
+
+/* ── DATA STREAM dots (matrix-rain-lite for dark slides) ─ */
+.data-stream {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+  opacity: .35;
+}
+.data-stream .ds {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green-light);
+  white-space: pre;
+  animation: dsFall linear infinite;
+  text-shadow: 0 0 6px rgba(107,197,206,.5);
+}
+@keyframes dsFall {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(1100px); opacity: 0; }
+}
+
+/* ── DASHBOARD live data counters ───────────────────────── */
+.kpi-val[data-live] {
+  transition: color .3s ease;
+}
+.kpi-val[data-live].flip {
+  color: var(--green-light);
+}
+
+/* ── ACTIVITY feed pulse ────────────────────────────────── */
+.act { animation: actFade 8s ease-in-out infinite; }
+.act:nth-child(1) { animation-delay: 0s; }
+.act:nth-child(2) { animation-delay: -2s; }
+.act:nth-child(3) { animation-delay: -4s; }
+.act:nth-child(4) { animation-delay: -6s; }
+.act:nth-child(5) { animation-delay: -1s; }
+@keyframes actFade {
+  0%, 100% { background: transparent; }
+  10%      { background: rgba(107,197,206,.04); }
+}
+
+/* ── SOL feat icons rotate slowly ──────────────────────── */
+.sol-feat-ico { animation: spinSlow 18s linear infinite; }
+.sol-feat:hover .sol-feat-ico { animation-duration: 4s; }
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+/* ── COVER title gradient sweep ────────────────────────── */
+.cover .accent {
+  background: linear-gradient(90deg, #6bc5ce 0%, #2d8a94 30%, #6bc5ce 60%, #2d8a94 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradSweep 6s linear infinite;
+}
+@keyframes gradSweep { to { background-position: -200% 0; } }
+
+/* ── CLOSING headline · blanco sólido ──────────────────── */
+.closing .accent {
+  background: none;
+  -webkit-text-fill-color: #ffffff;
+  color: #ffffff;
+  animation: none;
+}
+
+/* ── BIG IDEA claim glow ───────────────────────────────── */
+.bi-claim em { position: relative; }
+.bi-claim em::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: -4px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 1s cubic-bezier(.4,0,.2,1);
+}
+.slide.is-revealed .bi-claim em::after { transform: scaleX(1); transition-delay: 1.4s; }
+
+/* ── SECTION OPENERS · big number watermark ──────────── */
+.section-watermark {
+  position: absolute;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 720px;
+  line-height: .8;
+  color: rgba(107,197,206,.025);
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  letter-spacing: -.08em;
+}
+.section-watermark--br { right: -50px; bottom: -120px; }
+
+/* ── SUBTLE GRID DRIFT on more slides ────────────────── */
+.bgnet {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(34,106,114,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,106,114,.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  animation: gridDrift 40s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 95%);
+  z-index: 0;
+}
+
+/* ── CARD HOLO (rotating shine on key cards) ───────── */
+.pl-card, .tm-card, .pk-card, .es-phase, .bi-t-item {
+  position: relative;
+  overflow: hidden;
+}
+.pl-card::after, .tm-card::after, .pk-card::after, .es-phase::after, .bi-t-item::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -200%;
+  width: 80%; height: 200%;
+  background: linear-gradient(115deg, transparent 30%, rgba(107,197,206,.06) 50%, transparent 70%);
+  transform: skewX(-15deg);
+  pointer-events: none;
+  transition: left 1.2s cubic-bezier(.4,0,.2,1);
+}
+.slide.is-revealed .pl-card::after,
+.slide.is-revealed .tm-card::after,
+.slide.is-revealed .pk-card::after,
+.slide.is-revealed .es-phase::after,
+.slide.is-revealed .bi-t-item::after {
+  left: 300%;
+  transition-delay: calc(var(--i, 0) * 100ms + 800ms);
+}
+
+/* ── DASHBOARD ─ scanning beam under header ─────────── */
+.db-frame {
+  position: relative;
+}
+.db-frame::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+  animation: scanBeam 6s ease-in-out infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+@keyframes scanBeam {
+  0%, 100% { transform: translateX(-50%); opacity: 0; }
+  50%      { transform: translateX(50%);  opacity: 1; }
+}
+
+/* ── PROBLEM 7/10 · counter sweep ──────────────────── */
+.pr-big-num, .pr-big-den {
+  display: inline-block;
+}
+
+/* ── EVENT POSTER · pulse rings (more aggressive) ──── */
+.ev-poster-rings { z-index: 0; }
+.ev-poster-art { z-index: 1; }
+.ev-poster-sym { animation: gentleFloat 5s ease-in-out infinite; }
+@keyframes gentleFloat {
+  50% { transform: translateY(-8px); }
+}
+
+/* ── BAR CHART (dashboard) ─ animated growth ───────── */
+.bar-svg rect {
+  transform-origin: bottom;
+  transform-box: fill-box;
+  animation: barGrow 1.2s cubic-bezier(.4,0,.2,1) both;
+}
+.bar-svg rect:nth-child(1) { animation-delay: .1s; }
+.bar-svg rect:nth-child(2) { animation-delay: .18s; }
+.bar-svg rect:nth-child(3) { animation-delay: .26s; }
+.bar-svg rect:nth-child(4) { animation-delay: .34s; }
+.bar-svg rect:nth-child(5) { animation-delay: .42s; }
+.bar-svg rect:nth-child(6) { animation-delay: .5s; }
+.bar-svg rect:nth-child(7) { animation-delay: .58s; }
+@keyframes barGrow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* ── BWEB hero · animated form glow ─────────────────── */
+.bweb-form {
+  position: relative;
+  overflow: hidden;
+}
+.bweb-form::before {
+  content: '';
+  position: absolute; inset: -2px;
+  border-radius: 50px;
+  background: conic-gradient(from 0deg, transparent 0%, var(--green-light) 25%, transparent 50%);
+  animation: holoSpin 4s linear infinite;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: .5;
+}
+
+/* ── CHROME corner status (override existing chrome) ─ */
+.chrome::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(107,197,206,.3), transparent);
+  animation: chromeFlow 8s ease-in-out infinite;
+}
+@keyframes chromeFlow {
+  0%, 100% { opacity: .3; transform: scaleX(.6); }
+  50%      { opacity: 1; transform: scaleX(1); }
+}
+
+/* ── CL-GANTT · animated bar fill on reveal ─────── */
+.cl-row-bar {
+  transform-origin: left;
+  animation: ganttFill 1.4s cubic-bezier(.4,0,.2,1) both;
+}
+.slide.is-revealed .cl-row-bar {
+  animation-name: ganttFill;
+}
+.cl-row:nth-of-type(1) .cl-row-bar { animation-delay: .3s; }
+.cl-row:nth-of-type(2) .cl-row-bar { animation-delay: .5s; }
+.cl-row:nth-of-type(3) .cl-row-bar { animation-delay: .7s; }
+.cl-row:nth-of-type(4) .cl-row-bar { animation-delay: .9s; }
+.cl-row:nth-of-type(5) .cl-row-bar { animation-delay: 1.1s; }
+@keyframes ganttFill {
+  from { transform: scaleX(0); opacity: .3; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+/* ── PROGRESS BAR · prevent body scroll ─────────── */
+html, body { overflow: hidden; }
+
+/* ── CL-GANTT · alinear meses con barras ────────── */
+.cl-gantt .cl-gantt-months {
+  padding-left: 280px;
+}
+.cl-gantt .cl-rows .cl-row {
+  padding-left: 0 !important;
+  width: auto !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+.cl-gantt .cl-row .cl-row-lbl {
+  width: 280px !important;
+  outline: none !important;
+}
+.cl-gantt .cl-row-bar--ghost {
+  white-space: nowrap;
+  overflow: hidden;
+  justify-content: center;
+}
+.cl-gantt .cl-row-bar--ghost span {
+  width: auto !important;
+  text-align: center;
+  display: block;
+  white-space: nowrap;
+}
+
+/* ── CALENDAR SLIDE v2 · PHASE CARDS ────────────── */
+.slide.calendar {
+  display: flex; flex-direction: column;
+  height: 100%;
+  padding: 0 80px 52px;
+  box-sizing: border-box;
+}
+.slide.calendar .cl-head { margin-top: 52px; margin-bottom: 16px; }
+.slide.calendar .cl-title { font-size: 58px; }
+
+/* Phase row — fills available height */
+.cl-phases {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 14px;
+}
+
+/* Individual phase card */
+.cl-phase {
+  flex: 1;
+  background: white;
+  border-radius: 18px;
+  padding: 26px 24px 22px;
+  border: 1px solid rgba(13,27,42,.09);
+  box-shadow: 0 4px 20px rgba(13,27,42,.06);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .3s ease;
+}
+.cl-phase::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--green);
+  opacity: 0.35;
+}
+
+/* Día D — event card highlighted */
+.cl-phase--event {
+  background: linear-gradient(145deg, #173338 0%, #226A72 100%);
+  border: 1.5px solid rgba(107,197,206,.35);
+  box-shadow: 0 12px 48px rgba(34,106,114,.45);
+  flex: 1.35;
+}
+.cl-phase--event::before {
+  background: var(--green-light);
+  opacity: 1;
+  height: 4px;
+}
+
+/* Phase header */
+.cl-phase-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+.cl-phase--event .cl-phase-tag { color: rgba(107,197,206,.75); }
+
+.cl-phase-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; font-weight: 700;
+  color: rgba(13,27,42,.45);
+  letter-spacing: .06em;
+  margin-bottom: 12px;
+}
+.cl-phase--event .cl-phase-date {
+  color: var(--green-light);
+  font-size: 17px;
+}
+
+.cl-phase-name {
+  font-size: 24px; font-weight: 800;
+  color: var(--carbon);
+  line-height: 1.15;
+  margin: 0 0 14px;
+  letter-spacing: -.01em;
+}
+.cl-phase--event .cl-phase-name {
+  color: white;
+  font-size: 28px;
+}
+
+/* Bullet list inside card */
+.cl-phase-list {
+  list-style: none; margin: 0; padding: 12px 0 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  border-top: 1px solid rgba(13,27,42,.07);
+}
+.cl-phase-list li {
+  font-size: 17px;
+  color: rgba(13,27,42,.6);
+  padding: 4px 0 4px 22px;
+  position: relative;
+  line-height: 1.45;
+}
+.cl-phase-list li::before {
+  content: '→';
+  position: absolute; left: 0; top: 5px;
+  color: var(--green); font-size: 12px;
+}
+.cl-phase--event .cl-phase-list {
+  border-top-color: rgba(255,255,255,.12);
+}
+.cl-phase--event .cl-phase-list li {
+  color: rgba(255,255,255,.75);
+  font-size: 18px;
+}
+.cl-phase--event .cl-phase-list li::before { color: var(--green-light); }
+
+/* Stamp for the event card */
+.cl-phase-stamp {
+  margin-top: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: rgba(255,255,255,.22);
+  line-height: 1.7;
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 10px;
+}
+
+/* Arrow connector between cards */
+.cl-phase-arr {
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+.cl-phase-arr svg { width: 36px; height: 20px; }
+
+/* Always-on bar */
+.cl-alwayson {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 14px;
+  padding: 11px 20px;
+  background: rgba(34,106,114,.06);
+  border-radius: 10px;
+  border: 1px dashed rgba(34,106,114,.2);
+}
+.cl-alwayson-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--green);
+  white-space: nowrap;
+  padding-right: 20px;
+  border-right: 1px solid rgba(34,106,114,.2);
+  margin-right: 0;
+  flex-shrink: 0;
+}
+.cl-alwayson-items {
+  display: flex; flex: 1;
+  justify-content: space-around;
+}
+.cl-alwayson-items span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px; letter-spacing: .1em;
+  color: rgba(13,27,42,.45);
+  padding: 0 20px;
+  border-right: 1px solid rgba(34,106,114,.15);
+}
+.cl-alwayson-items span:last-child { border-right: none; }
+
+/* ══════════════════════════════════════════════════════
+   SLIDE 07 · MERCADO & OPORTUNIDAD
+   Reutiliza .pr-grid / .pr-left / .pr-right de Problem.
+   Solo añade clases específicas de mercado.
+══════════════════════════════════════════════════════ */
+.slide.market {
+  background: var(--paper);
+  flex-direction: row;
+  padding-top: 56px;
+}
+
+/* Hero stat (izquierda, panel oscuro) */
+.mk-hero { margin-top: 28px; margin-bottom: 4px; line-height: 1; }
+.mk-hero-num {
+  font-size: 148px;
+  font-weight: 900;
+  letter-spacing: -.05em;
+  line-height: .88;
+  color: var(--green-light);
+  display: block;
+}
+
+/* TAM / SAM / SOM table */
+.mk-tam-stack {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-radius: 14px;
+  overflow: hidden;
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+.mk-tam-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
+}
+.mk-tam-row--total { background: rgba(107,197,206,.18); }
+.mk-tam-row--sam   { background: rgba(107,197,206,.10); }
+.mk-tam-row--som   {
+  background: rgba(107,197,206,.05);
+  border: 1px dashed rgba(107,197,206,.3);
+}
+.mk-tam-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: var(--green-light);
+  min-width: 36px;
+}
+.mk-tam-desc {
+  flex: 1;
+  font-size: 14px;
+  color: rgba(255,255,255,.6);
+}
+.mk-tam-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  text-align: right;
+  white-space: nowrap;
+}
+.mk-tam-row--som .mk-tam-val { color: var(--green-light); }
+
+/* "Por qué ahora" — right panel */
+.mk-timing { margin-top: 32px; }
+.mk-timing-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+}
+.mk-timing-items { display: flex; flex-direction: column; gap: 14px; }
+.mk-timing-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 18px 22px;
+  background: var(--light-warm);
+  border-left: 3px solid var(--green);
+  border-radius: 12px;
+}
+.mk-timing-ico {
+  font-size: 18px;
+  color: var(--green);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.mk-timing-item strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--carbon);
+  margin-bottom: 3px;
+}
+.mk-timing-item span {
+  font-size: 15px;
+  color: var(--carbon-soft);
+  line-height: 1.45;
+}
+.mk-source {
+  margin-top: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: rgba(13,27,42,.28);
+}
+
+/* ══════════════════════════════════════════════════════
+   SLIDE 08 · POSICIONAMIENTO COMPETITIVO
+   Oscuro como solution/nextsteps. Layout propio 2 cols.
+══════════════════════════════════════════════════════ */
+.slide.competitive {
+  background: var(--dark);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding-top: 56px;
+}
+
+/* Two-column content area */
+.cp-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 54% 1fr;
+  gap: 60px;
+  height: 100%;
+  padding: 20px 80px 52px;
+  box-sizing: border-box;
+}
+
+/* Left column */
+.cp-left {
+  display: flex;
+  flex-direction: column;
+}
+.cp-title {
+  font-size: 62px;
+  font-weight: 900;
+  color: white;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  margin: 8px 0 24px;
+}
+
+/* Matrix wrapper */
+.cp-matrix-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+}
+.cp-matrix-inner {
+  flex: 1;
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  min-height: 0;
+}
+.cp-y-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(107,197,206,.38);
+  text-align: center;
+  flex-shrink: 0;
+}
+.cp-matrix {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.cp-x-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(107,197,206,.38);
+  text-align: center;
+  padding-left: 42px; /* offset for y-label */
+}
+
+/* Quadrants */
+.cp-quadrant {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: background .3s;
+}
+.cp-q--winner {
+  background: linear-gradient(145deg, rgba(34,106,114,.55) 0%, rgba(34,106,114,.28) 100%);
+  border: 1.5px solid rgba(107,197,206,.5);
+  position: relative;
+}
+.cp-winner-blip {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 8px; height: 8px;
+  background: var(--green-light);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--green-light);
+  animation: hudBlip 1.6s ease-in-out infinite;
+}
+.cp-q-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 6px;
+}
+.cp-q--winner .cp-q-name {
+  font-size: 18px;
+  color: var(--green-light);
+}
+.cp-q-eg {
+  font-size: 11px;
+  color: rgba(255,255,255,.3);
+  line-height: 1.4;
+}
+.cp-q--winner .cp-q-eg {
+  font-size: 13px;
+  color: rgba(107,197,206,.6);
+}
+
+/* Prevent section-tag from stretching full column width */
+.cp-left .section-tag { align-self: flex-start; }
+
+/* Right column */
+.cp-right {
+  display: flex;
+  flex-direction: column;
+  padding-top: 52px;
+  justify-content: center;
+}
+.cp-sub {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.25;
+  margin: 8px 0 28px;
+  letter-spacing: -.01em;
+}
+.cp-advantages {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+  justify-content: center;
+}
+.cp-adv {
+  display: flex;
+  gap: 20px;
+  padding: 20px 22px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  border-left: 3px solid var(--green);
+  border-radius: 12px;
+}
+.cp-adv-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-light);
+  min-width: 24px;
+  padding-top: 3px;
+  flex-shrink: 0;
+}
+.cp-adv strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 5px;
+}
+.cp-adv p {
+  font-size: 14px;
+  color: rgba(255,255,255,.5);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* ── SLIDE 22 · PRÓXIMOS PASOS ──────────────────── */
+.slide.nextsteps {
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.ns-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(34,106,114,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,106,114,.07) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.ns-glow {
+  position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px;
+  background: radial-gradient(ellipse at center, rgba(34,106,114,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ns-content {
+  position: relative; z-index: 2;
+  padding: 80px 120px 60px;
+  display: flex; flex-direction: column;
+  height: 100%;
+}
+.ns-content .section-tag,
+.ns-content .eyebrow { align-self: flex-start; }
+.ns-actions,
+.ns-cta { width: 100%; }
+.ns-title {
+  font-size: 88px; font-weight: 900;
+  color: white; line-height: 1.0;
+  letter-spacing: -.03em;
+  margin: 16px 0 52px;
+}
+.ns-actions {
+  display: flex; flex-direction: column; gap: 20px;
+  flex: 1;
+}
+.ns-action {
+  display: flex; align-items: flex-start; gap: 28px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(107,197,206,.18);
+  border-radius: 16px;
+  padding: 24px 32px;
+  transition: border-color .3s ease;
+}
+.ns-action:hover { border-color: rgba(107,197,206,.4); }
+.ns-action-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px; font-weight: 700;
+  color: var(--green-light);
+  min-width: 44px; line-height: 1;
+  padding-top: 4px;
+}
+.ns-action strong {
+  display: block;
+  font-size: 26px; font-weight: 800;
+  color: white; margin-bottom: 6px;
+  letter-spacing: -.01em;
+}
+.ns-action p {
+  font-size: 18px; color: rgba(255,255,255,.55);
+  line-height: 1.5; margin: 0;
+}
+.ns-cta {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 36px;
+  padding: 18px 28px;
+  background: rgba(34,106,114,.15);
+  border: 1px solid rgba(34,106,114,.4);
+  border-radius: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.ns-cta-lbl {
+  font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--green-light); font-weight: 700;
+  white-space: nowrap;
+}
+.ns-cta-val {
+  font-size: 15px; color: rgba(255,255,255,.7);
+  letter-spacing: .05em;
+}
+
+/* ── CLOSING · contacto mejorado ────────────────── */
+.closing-contact {
+  display: flex; align-items: center; gap: 32px;
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px; color: rgba(255,255,255,.45);
+  letter-spacing: .04em;
+}
+.closing-contact a { color: var(--green-light); text-decoration: none; }
+.closing-contact .bar { width: 1px; height: 16px; background: rgba(255,255,255,.2); }
+
+/* ── REDUCED MOTION respect ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
